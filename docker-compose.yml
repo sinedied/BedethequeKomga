@@ -1,0 +1,7 @@
+services:
+  bedetheque-komga:
+    build: .
+    volumes:
+      - ./config.py:/app/config.py:ro
+      - ./logs:/app/logs
+    restart: "no"

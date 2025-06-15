@@ -25,10 +25,63 @@ This metadata then gets converted to be compatible to Komga and then gets sent t
 ## Requirements
 
 - A Komga instance with access to the admin account
-- Either Windows/Linux/MAc or alternatively Docker
+- Either Windows/Linux/Mac or alternatively Docker
 - Python installed if using Windows, Linux or Mac natively (version 3.10 at least)
 
-## refresh metadata
+## Installation and Usage
+
+### Using Docker (Recommended)
+
+#### 1. Build the Docker image
+
+```bash
+docker build -t bedetheque-komga .
+```
+
+#### 2. Create your configuration file
+
+Copy `config.template.py` to `config.py` and edit it with your Komga instance details:
+
+```bash
+cp config.template.py config.py
+```
+
+Edit `config.py` with your Komga URL, email, and password.
+
+#### 3. Run the container
+
+```bash
+docker run --rm -v $(pwd)/config.py:/app/config.py -v $(pwd):/app/logs bedetheque-komga
+```
+
+This command:
+- Mounts your `config.py` file into the container
+- Mounts the current directory to preserve log files
+- Removes the container after execution
+
+#### Alternative: Using Docker Compose
+
+Create a `docker-compose.yml` file:
+
+```yaml
+services:
+  bedetheque-komga:
+    build: .
+    volumes:
+      - ./config.py:/app/config.py:ro
+      - ./logs:/app/logs
+    restart: "no"
+```
+
+Then run:
+
+```bash
+docker-compose up
+```
+
+### Using Python directly
+
+#### refresh metadata
 
 1. Install the requirements using `pip install -r requirements.txt`
 2. Rename `config.template.py` to `config.py` and edit the url, email and password to match the ones of your komga instance (User needs to have permission to edit the metadata).
